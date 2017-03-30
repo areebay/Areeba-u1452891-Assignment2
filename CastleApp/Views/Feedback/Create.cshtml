@@ -43,7 +43,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Rating, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Rating)
+                @Html.TextBoxFor(model => model.Rating, new { type = "number", min = 1, max = 5 })
                 @Html.ValidationMessageFor(model => model.Rating)
             </div>
         </div>

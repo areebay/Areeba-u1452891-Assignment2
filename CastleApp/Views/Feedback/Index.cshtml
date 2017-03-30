@@ -1,13 +1,23 @@
 ﻿@model IEnumerable<MvcFeedback.Models.Feedback>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Feedback";
 }
 
-<h2>Index</h2>
+<h2>Feedback</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @if (Request.IsAuthenticated)
+    {
+        @Html.ActionLink("Add Feedback", "Create")
+    }
+
+    @using (Html.BeginForm())
+    {
+        <p>
+            Client: @Html.TextBox("client") Comment: @Html.TextBox("comment") <input type="submit" value="Filter" />
+        </p>
+    }    
 </p>
 <table class="table">
     <tr>
@@ -40,11 +50,15 @@
         <td>
             @Html.DisplayFor(modelItem => item.Rating)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
+
+        @if (User.IsInRole("admin"))
+        {
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        }
     </tr>
 }
 

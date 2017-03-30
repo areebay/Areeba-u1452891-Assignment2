@@ -15,8 +15,33 @@ namespace CastleApp.Controllers
         private CastleDBContext db = new CastleDBContext();
 
         // GET: /Feedback/
-        public ActionResult Index()
+        public ActionResult Index(string client, string comment)
         {
+            // define LINQ query for search
+            var results = from m in db.Feedback
+                          select m;
+
+            bool search = false;
+
+            // filter by Client if client search string has been specified
+            if (!String.IsNullOrEmpty(client))
+            {
+                results = results.Where(s => s.ClientName.Contains(client));
+                search = true;
+            }
+
+            // filter by Comments if comment search string has been specified
+            if (!String.IsNullOrEmpty(comment))
+            {
+                results = results.Where(s => s.Comment.Contains(comment));
+                search = true;                
+            }
+
+            if (search)
+            {
+                return View(results);
+            }
+
             return View(db.Feedback.ToList());
         }
 
