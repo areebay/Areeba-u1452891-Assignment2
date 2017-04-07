@@ -18,7 +18,6 @@ namespace CastleApp.Controllers
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
-
         }
 
         public AccountController(UserManager<ApplicationUser> userManager)
@@ -50,6 +49,14 @@ namespace CastleApp.Controllers
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
+
+                    // Audit login
+                    Audit audit = new Audit();
+                    audit.Date = DateTime.Now;
+                    audit.UserId = user.Id;
+                    audit.Event = "User login: " + user.UserName;
+                    var audit_result = new AuditsController().Create(audit);
+
                     return RedirectToLocal(returnUrl);
                 }
                 else
@@ -84,6 +91,14 @@ namespace CastleApp.Controllers
                 if (result.Succeeded)
                 {
                     await SignInAsync(user, isPersistent: false);
+
+                    // Audit registration
+                    Audit audit = new Audit();
+                    audit.Date = DateTime.Now;
+                    audit.UserId = user.Id;
+                    audit.Event = "User registration: " + user.UserName;
+                    var audit_result = new AuditsController().Create(audit);
+
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -290,6 +305,13 @@ namespace CastleApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            // Audit registration
+            Audit audit = new Audit();
+            audit.Date = DateTime.Now;
+            audit.UserId = User.Identity.GetUserId();
+            audit.Event = "User logoff: " + User.Identity.GetUserName();
+            var audit_result = new AuditsController().Create(audit);
+
             AuthenticationManager.SignOut();
             return RedirectToAction("Index", "Home");
         }

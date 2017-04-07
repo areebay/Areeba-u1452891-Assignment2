@@ -2,7 +2,7 @@
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 
-namespace MvcFeedback.Models
+namespace CastleApp.Models
 {
     public class Feedback
     {
@@ -24,7 +24,7 @@ namespace MvcFeedback.Models
         }
     }
 
-    public class CastleDBContext : DbContext
+    public class FeedbackDBContext : DbContext
     {
         public DbSet<Feedback> Feedback { get; set; }
     }

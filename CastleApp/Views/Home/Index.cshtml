@@ -5,7 +5,7 @@
 <div class="jumbotron">
     <h1>Welcome to Castle Getaway</h1>
     <p class="lead">Thank you for your interest in our holiday retreat. Please use the links to navigate the site.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+    <p><a href="/Home/About" class="btn btn-primary btn-large">Learn more about the castle &raquo;</a></p>
 </div>
 
 <div class="row">
@@ -14,7 +14,18 @@
         <p>
             Book a reservation at the castle.
         </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Book Reservation &raquo;</a></p>
+        @if (Request.IsAuthenticated)
+        {
+            <p><a class="btn btn-default" href="/Bookings/Create">Book Reservation &raquo;</a></p>
+            if (User.IsInRole("admin"))
+            {
+                <p><a class="btn btn-default" href="/Bookings">View Reservations &raquo;</a></p>
+            }
+        }
+        else
+        {
+            <p>Please register an account and login to make a reservation.</p>
+        }
     </div>
     <div class="col-md-4">
         <h2>View Feedback</h2>
@@ -26,4 +37,12 @@
         <p>Send us a message with any other detailed requests you may have.</p>
         <p><a class="btn btn-default" href="/Home/Contact">Contact &raquo;</a></p>
     </div>
+    @if (Request.IsAuthenticated && User.IsInRole("admin"))
+    {
+        <div class="col-md-4">
+            <h2>Audit Log</h2>
+            <p>View entries in the automatic audit log.</p>
+            <p><a class="btn btn-default" href="/Audits">Audit Log &raquo;</a></p>
+        </div>
+    }
 </div>

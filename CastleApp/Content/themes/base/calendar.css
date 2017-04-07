@@ -1,0 +1,39 @@
+﻿#dvCalendar 
+{
+    font-family:Arial;
+    font-size:12pt;
+    padding:5px;
+}
+
+.Highlighted a {
+   background-color:Red !important;
+   background-image:none !important;
+   color:White !important;
+   font-weight:bold !important;
+   font-size:12pt;
+}
+
+.ui-datepicker-prev, .ui-datepicker-next { 
+    display:none;
+}
+
+/*Unselect seleced day and current day: https://forum.jquery.com/topic/datepicker-how-not-to-highlight-current-day */
+#dvCalendar .ui-state-highlight {
+    background: #F6F6F6;
+    color: #555555;
+    border: 1px solid #D3D3D3;
+}
+
+#dvCalendar .ui-state-hover {
+    border: 1px solid #999999;
+    background: #F6F6F6;
+    font-weight: normal;
+    color: #212121;
+}
+
+#dvCalendar .ui-state-active {
+    border: 1px solid #aaaaaa;
+    background: #F6F6F6;
+    font-weight: normal;
+    color: #212121;
+}

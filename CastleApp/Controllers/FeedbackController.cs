@@ -6,13 +6,14 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using MvcFeedback.Models;
+using CastleApp.Models;
+using Microsoft.AspNet.Identity;
 
 namespace CastleApp.Controllers
 {
     public class FeedbackController : Controller
     {
-        private CastleDBContext db = new CastleDBContext();
+        private FeedbackDBContext db = new FeedbackDBContext();
 
         // GET: /Feedback/
         public ActionResult Index(string client, string comment)
@@ -35,6 +36,18 @@ namespace CastleApp.Controllers
             {
                 results = results.Where(s => s.Comment.Contains(comment));
                 search = true;                
+            }
+
+            // Audit (only if a user is logged-in)
+            if (User.Identity.GetUserId() != null && User.Identity.GetUserId() != String.Empty)
+            {
+                Audit audit = new Audit();
+                audit.Date = DateTime.Now;
+                audit.UserId = User.Identity.GetUserId();
+                audit.Event = "User search: " + User.Identity.GetUserName() +
+                    " (ClientSearchVal: " + client + ")" +
+                    " (CommentSearchVal: " + comment + ")";
+                var audit_result = new AuditsController().Create(audit);
             }
 
             if (search)
